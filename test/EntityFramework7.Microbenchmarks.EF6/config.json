@@ -1,7 +1,0 @@
-﻿{
-  "benchmarks": {
-    "runIterations": false,
-    "benchmarkDatabaseInstance": "(localdb)\\mssqllocaldb",
-    "productReportingVersion":  "EF6"
-  }
-}
