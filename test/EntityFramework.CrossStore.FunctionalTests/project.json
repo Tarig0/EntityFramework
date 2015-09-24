@@ -5,10 +5,19 @@
     "EntityFramework.SqlServer.FunctionalTests": "1.0.0"
   },
   "commands": {
+<<<<<<< HEAD
     "test": "xunit.runner.dnx"
   },
   "frameworks": {
     "net46": { },
     "dnx451": { }
+=======
+    "test": "xunit.runner.aspnet"
+  },
+  "frameworks": {
+    "net46": { },
+    "dnx451": { },
+    "dnxcore50": { }
+>>>>>>> d2802fdaf35458e35a69f9573e57c592d43c6367
   }
 }

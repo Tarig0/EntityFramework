@@ -4,7 +4,11 @@
     "EntityFramework.SqlServer.Design": "7.0.0-*"
   },
   "commands": {
+<<<<<<< HEAD
     "test": "xunit.runner.dnx"
+=======
+    "test": "xunit.runner.aspnet"
+>>>>>>> d2802fdaf35458e35a69f9573e57c592d43c6367
   },
   "frameworks": {
     "net46": { },

@@ -1,7 +1,10 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+<<<<<<< HEAD
 using System;
+=======
+>>>>>>> d2802fdaf35458e35a69f9573e57c592d43c6367
 using System.Linq;
 using EntityFramework.Microbenchmarks.Core;
 using EntityFramework.Microbenchmarks.Core.Models.Orders;
@@ -11,6 +14,7 @@ using Xunit;
 
 namespace EntityFramework.Microbenchmarks.UpdatePipeline
 {
+<<<<<<< HEAD
     public class SimpleUpdatePipelineTests
     {
         private static readonly string _connectionString 
@@ -45,6 +49,23 @@ namespace EntityFramework.Microbenchmarks.UpdatePipeline
         private static void Insert(TestHarness harness, bool disableBatching)
         {
             using (var context = new OrdersContext(_connectionString, disableBatching))
+=======
+    public class SimpleUpdatePipelineTests : IClassFixture<SimpleUpdatePipelineTests.SimpleUpdatePipelineFixture>
+    {
+        private readonly SimpleUpdatePipelineFixture _fixture;
+
+        public SimpleUpdatePipelineTests(SimpleUpdatePipelineFixture fixture)
+        {
+            _fixture = fixture;
+        }
+
+        [Benchmark]
+        [BenchmarkVariation("Batching Off", true)]
+        [BenchmarkVariation("Default", false)]
+        public void Insert(MetricCollector collector, bool disableBatching)
+        {
+            using (var context = _fixture.CreateContext(disableBatching))
+>>>>>>> d2802fdaf35458e35a69f9573e57c592d43c6367
             {
                 using (context.Database.BeginTransaction())
                 {
@@ -53,15 +74,22 @@ namespace EntityFramework.Microbenchmarks.UpdatePipeline
                         context.Customers.Add(new Customer { Name = "New Customer " + i });
                     }
 
+<<<<<<< HEAD
                     harness.StartCollection();
                     var records = context.SaveChanges();
                     harness.StopCollection();
+=======
+                    collector.StartCollection();
+                    var records = context.SaveChanges();
+                    collector.StopCollection();
+>>>>>>> d2802fdaf35458e35a69f9573e57c592d43c6367
 
                     Assert.Equal(1000, records);
                 }
             }
         }
 
+<<<<<<< HEAD
         [Fact]
         public void Update()
         {
@@ -91,6 +119,14 @@ namespace EntityFramework.Microbenchmarks.UpdatePipeline
         private static void Update(TestHarness harness, bool disableBatching)
         {
             using (var context = new OrdersContext(_connectionString, disableBatching))
+=======
+        [Benchmark]
+        [BenchmarkVariation("Batching Off", true)]
+        [BenchmarkVariation("Default", false)]
+        public void Update(MetricCollector collector, bool disableBatching)
+        {
+            using (var context = _fixture.CreateContext(disableBatching))
+>>>>>>> d2802fdaf35458e35a69f9573e57c592d43c6367
             {
                 using (context.Database.BeginTransaction())
                 {
@@ -99,15 +135,22 @@ namespace EntityFramework.Microbenchmarks.UpdatePipeline
                         customer.Name += " Modified";
                     }
 
+<<<<<<< HEAD
                     harness.StartCollection();
                     var records = context.SaveChanges();
                     harness.StopCollection();
+=======
+                    collector.StartCollection();
+                    var records = context.SaveChanges();
+                    collector.StopCollection();
+>>>>>>> d2802fdaf35458e35a69f9573e57c592d43c6367
 
                     Assert.Equal(1000, records);
                 }
             }
         }
 
+<<<<<<< HEAD
         [Fact]
         public void Delete()
         {
@@ -137,6 +180,14 @@ namespace EntityFramework.Microbenchmarks.UpdatePipeline
         private static void Delete(TestHarness harness, bool disableBatching)
         {
             using (var context = new OrdersContext(_connectionString, disableBatching))
+=======
+        [Benchmark]
+        [BenchmarkVariation("Batching Off", true)]
+        [BenchmarkVariation("Default", false)]
+        public void Delete(MetricCollector collector, bool disableBatching)
+        {
+            using (var context = _fixture.CreateContext(disableBatching))
+>>>>>>> d2802fdaf35458e35a69f9573e57c592d43c6367
             {
                 using (context.Database.BeginTransaction())
                 {
@@ -145,15 +196,22 @@ namespace EntityFramework.Microbenchmarks.UpdatePipeline
                         context.Customers.Remove(customer);
                     }
 
+<<<<<<< HEAD
                     harness.StartCollection();
                     var records = context.SaveChanges();
                     harness.StopCollection();
+=======
+                    collector.StartCollection();
+                    var records = context.SaveChanges();
+                    collector.StopCollection();
+>>>>>>> d2802fdaf35458e35a69f9573e57c592d43c6367
 
                     Assert.Equal(1000, records);
                 }
             }
         }
 
+<<<<<<< HEAD
         [Fact]
         public void Mixed()
         {
@@ -183,6 +241,14 @@ namespace EntityFramework.Microbenchmarks.UpdatePipeline
         private static void Mixed(TestHarness harness, bool disableBatching)
         {
             using (var context = new OrdersContext(_connectionString, disableBatching))
+=======
+        [Benchmark]
+        [BenchmarkVariation("Batching Off", true)]
+        [BenchmarkVariation("Default", false)]
+        public void Mixed(MetricCollector collector, bool disableBatching)
+        {
+            using (var context = _fixture.CreateContext(disableBatching))
+>>>>>>> d2802fdaf35458e35a69f9573e57c592d43c6367
             {
                 using (context.Database.BeginTransaction())
                 {
@@ -203,15 +269,22 @@ namespace EntityFramework.Microbenchmarks.UpdatePipeline
                         customers[i].Name += " Modified";
                     }
 
+<<<<<<< HEAD
                     harness.StartCollection();
                     var records = context.SaveChanges();
                     harness.StopCollection();
+=======
+                    collector.StartCollection();
+                    var records = context.SaveChanges();
+                    collector.StopCollection();
+>>>>>>> d2802fdaf35458e35a69f9573e57c592d43c6367
 
                     Assert.Equal(1000, records);
                 }
             }
         }
 
+<<<<<<< HEAD
         private static void EnsureDatabaseSetup()
         {
             new OrdersSeedData().EnsureCreated(
@@ -220,6 +293,13 @@ namespace EntityFramework.Microbenchmarks.UpdatePipeline
                 customerCount: 1000,
                 ordersPerCustomer: 0,
                 linesPerOrder: 0);
+=======
+        public class SimpleUpdatePipelineFixture : OrdersFixture
+        {
+            public SimpleUpdatePipelineFixture()
+                : base("Perf_UpdatePipeline_Simple", 0, 1000, 0, 0)
+            { }
+>>>>>>> d2802fdaf35458e35a69f9573e57c592d43c6367
         }
     }
 }

@@ -9,6 +9,7 @@ using Xunit;
 
 namespace EntityFramework.Microbenchmarks.Query
 {
+<<<<<<< HEAD
     public class FuncletizationTests
     {
         private static readonly string _connectionString 
@@ -100,6 +101,73 @@ namespace EntityFramework.Microbenchmarks.Query
                             }
                         }
                 }.RunTest();
+=======
+    public class FuncletizationTests : IClassFixture<FuncletizationTests.FuncletizationFixture>
+    {
+        private readonly FuncletizationFixture _fixture;
+        private static readonly int _funcletizationIterationCount = 100;
+
+        public FuncletizationTests(FuncletizationFixture fixture)
+        {
+            _fixture = fixture;
+        }
+
+        [Benchmark]
+        public void NewQueryInstance(MetricCollector collector)
+        {
+
+            using (var context = _fixture.CreateContext())
+            {
+                using (collector.StartCollection())
+                {
+                    var val = 11;
+                    for (var i = 0; i < _funcletizationIterationCount; i++)
+                    {
+                        var result = context.Products.Where(p => p.ProductId < val).ToList();
+
+                        Assert.Equal(10, result.Count);
+                    }
+                }
+            }
+        }
+
+        [Benchmark]
+        public void SameQueryInstance(MetricCollector collector)
+        {
+            using (var context = _fixture.CreateContext())
+            {
+                using (collector.StartCollection())
+                {
+                    var val = 11;
+                    var query = context.Products.Where(p => p.ProductId < val);
+
+                    for (var i = 0; i < _funcletizationIterationCount; i++)
+                    {
+                        var result = query.ToList();
+
+                        Assert.Equal(10, result.Count);
+                    }
+                }
+            }
+        }
+
+        [Benchmark]
+        public void ValueFromObject(MetricCollector collector)
+        {
+            using (var context = _fixture.CreateContext())
+            {
+                using (collector.StartCollection())
+                {
+                    var valueHolder = new ValueHolder();
+                    for (var i = 0; i < _funcletizationIterationCount; i++)
+                    {
+                        var result = context.Products.Where(p => p.ProductId < valueHolder.SecondLevelProperty).ToList();
+
+                        Assert.Equal(10, result.Count);
+                    }
+                }
+            }
+>>>>>>> d2802fdaf35458e35a69f9573e57c592d43c6367
         }
 
         public class ValueHolder
@@ -112,6 +180,7 @@ namespace EntityFramework.Microbenchmarks.Query
             }
         }
 
+<<<<<<< HEAD
         private static void EnsureDatabaseSetup()
         {
             new OrdersSeedData().EnsureCreated(
@@ -120,6 +189,13 @@ namespace EntityFramework.Microbenchmarks.Query
                 customerCount: 0,
                 ordersPerCustomer: 0,
                 linesPerOrder: 0);
+=======
+        public class FuncletizationFixture : OrdersFixture
+        {
+            public FuncletizationFixture()
+                : base("Perf_Query_Funcletization", 100, 0, 0, 0)
+            { }
+>>>>>>> d2802fdaf35458e35a69f9573e57c592d43c6367
         }
     }
 }

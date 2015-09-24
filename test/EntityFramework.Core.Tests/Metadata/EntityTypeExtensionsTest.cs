@@ -1,6 +1,7 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+<<<<<<< HEAD
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Data.Entity.Metadata;
@@ -8,6 +9,15 @@ using Moq;
 using Xunit;
 
 namespace Microsoft.Data.Entity.Tests.Metadata
+=======
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Moq;
+using Xunit;
+
+namespace Microsoft.Data.Entity.Metadata.Tests
+>>>>>>> d2802fdaf35458e35a69f9573e57c592d43c6367
 {
     public class EntityTypeExtensionsTest
     {
@@ -32,12 +42,74 @@ namespace Microsoft.Data.Entity.Tests.Metadata
         [Fact]
         public void Can_get_referencing_foreign_keys()
         {
+<<<<<<< HEAD
             var modelMock = new Mock<Model>();
             var entityType = new EntityType("Customer", modelMock.Object);
 
             entityType.GetReferencingForeignKeys();
 
             modelMock.Verify(m => m.GetReferencingForeignKeys(entityType), Times.Once());
+=======
+            var model = new Model();
+            var entityType = model.AddEntityType("Customer");
+            var idProperty = entityType.AddProperty("id", typeof(int));
+            var fkProperty = entityType.AddProperty("fk", typeof(int));
+            var fk = entityType.AddForeignKey(fkProperty, entityType.SetPrimaryKey(idProperty), entityType);
+
+            Assert.Same(fk, entityType.FindReferencingForeignKeys().Single());
+        }
+
+        [Fact]
+        public void Can_get_root_type()
+        {
+            var model = new Model();
+            var a = model.AddEntityType("A");
+            var b = model.AddEntityType("B");
+            var c = model.AddEntityType("C");
+            b.BaseType = a;
+            c.BaseType = b;
+
+            Assert.Same(a, a.RootType());
+            Assert.Same(a, b.RootType());
+            Assert.Same(a, c.RootType());
+        }
+
+        [Fact]
+        public void Can_get_derived_types()
+        {
+            var model = new Model();
+            var a = model.AddEntityType("A");
+            var b = model.AddEntityType("B");
+            var c = model.AddEntityType("C");
+            var d = model.AddEntityType("D");
+            b.BaseType = a;
+            c.BaseType = b;
+            d.BaseType = a;
+
+            Assert.Equal(new[] { b, d, c }, a.GetDerivedTypes().ToArray());
+            Assert.Equal(new[] { c }, b.GetDerivedTypes().ToArray());
+            Assert.Equal(new[] { b, d }, a.GetDirectlyDerivedTypes().ToArray());
+        }
+
+        [Fact]
+        public void Can_determine_whether_IsAssignableFrom()
+        {
+            var model = new Model();
+            var a = model.AddEntityType("A");
+            var b = model.AddEntityType("B");
+            var c = model.AddEntityType("C");
+            var d = model.AddEntityType("D");
+            b.BaseType = a;
+            c.BaseType = b;
+            d.BaseType = a;
+
+            Assert.True(a.IsAssignableFrom(a));
+            Assert.True(a.IsAssignableFrom(b));
+            Assert.True(a.IsAssignableFrom(c));
+            Assert.False(b.IsAssignableFrom(a));
+            Assert.False(c.IsAssignableFrom(a));
+            Assert.False(b.IsAssignableFrom(d));
+>>>>>>> d2802fdaf35458e35a69f9573e57c592d43c6367
         }
 
         [Fact]
@@ -51,7 +123,11 @@ namespace Microsoft.Data.Entity.Tests.Metadata
 
         }
 
+<<<<<<< HEAD
         public class A<T>
+=======
+        private class A<T>
+>>>>>>> d2802fdaf35458e35a69f9573e57c592d43c6367
         {
 
         }

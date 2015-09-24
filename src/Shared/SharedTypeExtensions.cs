@@ -75,6 +75,13 @@ namespace System
         public static bool IsPrimitive(this Type type)
             => type.IsInteger() || type.IsNonIntegerPrimitive();
 
+        public static bool IsInstantiable(this Type type) => IsInstantiable(type.GetTypeInfo());
+
+        private static bool IsInstantiable(TypeInfo type)
+            => !type.IsAbstract
+               && !type.IsInterface
+               && (!type.IsGenericType || !type.IsGenericTypeDefinition);
+
         public static Type UnwrapEnumType(this Type type)
         {
             var isNullable = type.IsNullableType();
@@ -198,5 +205,11 @@ namespace System
                 ? value
                 : Activator.CreateInstance(type);
         }
+
+        public static IEnumerable<TypeInfo> GetConstructibleTypes(this Assembly assembly)
+            => assembly.DefinedTypes.Where(
+                t => !t.IsAbstract
+                     && !t.IsGenericType
+                     && t.DeclaredConstructors.Any(c => c.GetParameters().Length == 0 && c.IsPublic));
     }
 }
