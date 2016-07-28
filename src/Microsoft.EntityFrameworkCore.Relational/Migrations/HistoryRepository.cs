@@ -64,17 +64,17 @@ namespace Microsoft.EntityFrameworkCore.Migrations
             TableSchema = relationalOptions?.MigrationsHistoryTableSchema;
             _model = new LazyRef<IModel>(
                 () =>
-                {
-                    var modelBuilder = new ModelBuilder(new ConventionSet());
-                    modelBuilder.Entity<HistoryRow>(
-                        x =>
-                        {
-                            ConfigureTable(x);
-                            x.ToTable(TableName, TableSchema);
-                        });
+                    {
+                        var modelBuilder = new ModelBuilder(new ConventionSet());
+                        modelBuilder.Entity<HistoryRow>(
+                            x =>
+                                {
+                                    ConfigureTable(x);
+                                    x.ToTable(TableName, TableSchema);
+                                });
 
-                    return modelBuilder.Model;
-                });
+                        return modelBuilder.Model;
+                    });
             var entityType = new LazyRef<IEntityType>(() => _model.Value.FindEntityType(typeof(HistoryRow)));
             _migrationIdColumnName = new LazyRef<string>(
                 () => annotations.For(entityType.Value.FindProperty(nameof(HistoryRow.MigrationId))).ColumnName);
